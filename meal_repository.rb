@@ -1,3 +1,5 @@
+require 'csv'
+require_relative './meal'
 class MealRepository
     def initialize(csv_file)
         @csv_file = csv_file
@@ -28,7 +30,7 @@ class MealRepository
 
     def load_csv
         csv_option = { headers: :first_row, header_converters: :symbol }
-        CsV.foreach(@csv_file, csv_option) do |row|
+        CSV.foreach(@csv_file, csv_option) do |row|
             row[:id] = row[:id].to_i
             row[:price] = row[:price].to_i
             @meals << Meal.new(row)
