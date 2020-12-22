@@ -13,8 +13,8 @@ class MealRepository
     end
 
     def create(meal)
-        @meal.id = next_id
-        @meal.id += 1
+        meal.id = @next_id
+        @next.id += 1
         @meals << meal
         store_csv
     end
@@ -27,7 +27,6 @@ class MealRepository
         @meals.delete_at(index_meal)
         store_csv
     end
-
     def load_csv
         csv_option = { headers: :first_row, header_converters: :symbol }
         CSV.foreach(@csv_file, csv_option) do |row|
@@ -35,7 +34,7 @@ class MealRepository
             row[:price] = row[:price].to_i
             @meals << Meal.new(row)
         end
-        next_id = @meal.id ? 1 : @meals.last.id + 1
+        @next_id = @meals.empty? ? 1 : @meals.last.id + 1
     end
 
     def store_csv
